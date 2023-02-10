@@ -2,52 +2,52 @@
 // import './App.css';
 
 import React, {
-  useState,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
-  useCallback,
+  useState,
 } from "react";
 import Globe from "react-globe.gl";
-import { scaleSequentialSqrt } from "d3-scale";
+
+import Drawer from "@mui/material/Drawer";
 import { geoCentroid } from "d3-geo";
 import { interpolateHue } from "d3-interpolate";
+import { scaleSequentialSqrt } from "d3-scale";
 import countriesGeoJson from "./ne_110m_admin_0_countries.geojson";
-import Drawer from "@mui/material/Drawer";
 
-import CountryOverlay from "./Components/selectedCountyOverlay";
-import { Box } from "@mui/system";
-import { Grid } from "@mui/material";
-import { List } from "@mui/material";
+import * as THREE from "three";
+
+import { Grid, List } from "@mui/material";
+import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
+import { Box } from "@mui/system";
+import CountryOverlay from "./Components/selectedCountyOverlay";
 
 const World = () => {
   const globeRef = useRef();
   const [countries, setCountries] = useState({ features: [] });
-  const [hoverD, setHoverD] = useState();
+  const [hoverCountryPolygon, setHoverCountryPolygon] = useState();
   const [rotation, setRotation] = useState(true);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const [countryLabel, setCountryLabel] = useState(false);
-  const [selectedCountryOverlayPos, setSelectedCountryOverlayPos] =
-    useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // useEffect(() => {
-  //   const MAP_CENTER = { lat: 0, lng: 0, altitude: 1.5 };
-  //   globeRef.current.pointOfView(MAP_CENTER, 0);
-  // }, [globeRef]);
+  const globeMaterial = new THREE.MeshPhongMaterial();
+  globeMaterial.shininess = 2;
+  globeMaterial.refractionRatio = 0.2;
+  globeMaterial.color = new THREE.Color("#001f05");
 
   useEffect(() => {
     globeRef.current.controls().autoRotate = true;
-    globeRef.current.controls().autoRotateSpeed = 0.25;
+    globeRef.current.controls().autoRotateSpeed = 0.32;
 
-    globeRef.current.pointOfView({ altitude: 1.4 }, 0);
+    globeRef.current.pointOfView({ lat: 0, lng: 0, altitude: 1.8 }, 0);
 
+    // Maybe fix
     // globeRef.current.controls().addEventListener("start", () => {
     //   globeRef.current.controls().autoRotate = false;
     // });
