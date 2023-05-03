@@ -6,7 +6,7 @@ import { geoCentroid } from "d3-geo";
 import { Grid, Drawer, styled } from "@mui/material";
 import countriesGeoJson from "./ne_110m_admin_0_countries.geojson";
 import CountryNewsList from "./components/CountryNewsList";
-import { combineRss, fetchMultipleRss, parseMultipleRss } from "./lib";
+import {  combineRss, fetchMultipleRss, parseMultipleRss } from "./lib";
 
 const World = () => {
   const globeRef = useRef();
@@ -72,13 +72,12 @@ const World = () => {
         "http://www.channelnewsasia.com/rssfeeds/8395884",
         "http://feeds.news24.com/articles/news24/World/rss",
         "https://www.scmp.com/rss/91/feed",
-        "https://ru.euronews.com/rss?format=mrss&level=theme&name=news",
         "https://www.france24.com/en/rss",
-        "https://rss.dw.com/rdf/rss-en-all"
+        // "https://rss.dw.com/rdf/rss-en-all"
       ]);
-      const parsedFeeds = await parseMultipleRss(rssList);
-      const combined = combineRss(parsedFeeds);
-      setRssFeed(combined);
+      const parsedFeeds= await parseMultipleRss(rssList);
+      setRssFeed(combineRss(parsedFeeds))
+      
     };
     fetchAndCombine();
   }, []);

@@ -62,7 +62,7 @@ const combineRss =(feeds)=>{
   }
 
   feeds.forEach((feed) => {
-    combineFeed.items= combineFeed.items.concat(feed.items)    
+    combineFeed.items= combineFeed.items.concat(feed.rss.channel.item)    
   });
   console.info(combineFeed)
    return combineFeed
