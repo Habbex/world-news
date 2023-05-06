@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Globe from "react-globe.gl";
 import * as THREE from "three";
@@ -6,7 +7,8 @@ import { geoCentroid } from "d3-geo";
 import { Grid, Drawer, styled } from "@mui/material";
 import countriesGeoJson from "./ne_110m_admin_0_countries.geojson";
 import CountryNewsList from "./components/CountryNewsList";
-import {  combineRss, fetchMultipleRss, parseMultipleRss } from "./lib";
+import CountryNewsCard from "./components/CountryNewsCard"
+import { combineRss, fetchMultipleRss, parseMultipleRss } from "./lib";
 
 const World = () => {
   const globeRef = useRef();
@@ -17,16 +19,17 @@ const World = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [rssFeed, setRssFeed] = useState();
+  const [test, setTest] = useState();
 
-  const drawerWidth = 240;
-  const StyledDrawer = styled(Drawer)(({ theme }) => ({
-    [theme.breakpoints.up("sm")]: {
-      width: drawerWidth,
-      zIndex: 4,
-      position: "absolute",
-      // flexShrink: 0,
-    },
-  }));
+  // const drawerWidth = 240;
+  // const StyledDrawer = styled(Drawer)(({ theme }) => ({
+  //   [theme.breakpoints.up("sm")]: {
+  //     width: drawerWidth,
+  //     zIndex: 4,
+  //     position: "absolute",
+  //     // flexShrink: 0,
+  //   },
+  // }));
 
   const globeMaterial = new THREE.MeshPhongMaterial();
   globeMaterial.shininess = 2;
@@ -75,9 +78,8 @@ const World = () => {
         "https://www.france24.com/en/rss",
         // "https://rss.dw.com/rdf/rss-en-all"
       ]);
-      const parsedFeeds= await parseMultipleRss(rssList);
-      setRssFeed(combineRss(parsedFeeds))
-      
+      const parsedFeeds = await parseMultipleRss(rssList);
+      setRssFeed(combineRss(parsedFeeds));
     };
     fetchAndCombine();
   }, []);
@@ -91,7 +93,9 @@ const World = () => {
       lat: centerOfCountry[1],
       lng: centerOfCountry[0],
       altitude: 1,
+      admin:countryPolygon.properties.ADMIN
     };
+    setTest(countryLocation);
 
     globeRef.current.controls().autoRotate = false;
     globeRef.current.pointOfView(countryLocation, 3000);
@@ -112,6 +116,13 @@ const World = () => {
     },
     [selectedCountry, globeRef]
   );
+
+  const N = 1;
+  const gData = [...Array(N).keys()].map(() => ({
+    lat: test?.lat ? test.lat : (Math.random() - 0.5) * 180,
+    lng: test?.lng ? test.lng : (Math.random() - 0.5) * 360,
+    admin: test?.admin ? test.admin : ""
+  }));
 
   return (
     <Grid container>
@@ -141,8 +152,10 @@ const World = () => {
           <b>${d.ADMIN} (${d.ISO_A2})</b>
         `
         }
+        htmlElementsData={gData}
+        htmlElement={(d) => { return CountryNewsCard(d)}}
       />
-      <StyledDrawer
+      {/* <StyledDrawer
         anchor="right"
         open={drawerOpen}
         onClose={() => {
@@ -160,7 +173,7 @@ const World = () => {
             setTabValue,
             rssFeed
           )}
-      </StyledDrawer>
+      </StyledDrawer> */}
     </Grid>
   );
 };
