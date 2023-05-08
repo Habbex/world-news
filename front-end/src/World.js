@@ -21,15 +21,15 @@ const World = () => {
   const [rssFeed, setRssFeed] = useState();
   const [test, setTest] = useState();
 
-  // const drawerWidth = 240;
-  // const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  //   [theme.breakpoints.up("sm")]: {
-  //     width: drawerWidth,
-  //     zIndex: 4,
-  //     position: "absolute",
-  //     // flexShrink: 0,
-  //   },
-  // }));
+  const drawerWidth = 240;
+  const StyledDrawer = styled(Drawer)(({ theme }) => ({
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      zIndex: 4,
+      position: "absolute",
+      // flexShrink: 0,
+    },
+  }));
 
   const globeMaterial = new THREE.MeshPhongMaterial();
   globeMaterial.shininess = 2;
@@ -83,6 +83,8 @@ const World = () => {
     };
     fetchAndCombine();
   }, []);
+
+
 
   const handleCountryPolygonClick = (countryPolygon) => {
     setSelectedCountry(countryPolygon);
@@ -154,8 +156,9 @@ const World = () => {
         }
         htmlElementsData={gData}
         htmlElement={(d) => { return CountryNewsCard(d)}}
+        htmlTransitionDuration={400}
       />
-      {/* <StyledDrawer
+      <StyledDrawer
         anchor="right"
         open={drawerOpen}
         onClose={() => {
@@ -173,7 +176,7 @@ const World = () => {
             setTabValue,
             rssFeed
           )}
-      </StyledDrawer> */}
+      </StyledDrawer>
     </Grid>
   );
 };
